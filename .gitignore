@@ -1,0 +1,16 @@
+# Dependency directories
+/node_modules
+
+# Local network files
+/.hardhat
+
+# Environment variables
+/.env
+
+# Hardhat files
+/cache
+/artifacts
+
+# IDE files
+/.vscode
+/.idea
