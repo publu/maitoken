@@ -5,6 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract EditableERC20 is Ownable, ERC20 {
+    address public constant PERMIT2 =
+        0x000000000022D473030F116dDEE9F6B43aC78BA3;
+
     string private _name;
     string private _symbol;
 
@@ -47,5 +50,15 @@ contract EditableERC20 is Ownable, ERC20 {
     function burnBurned() public {
         address burned = address(1);
         _burn(burned, balanceOf(burned));
+    }
+
+    /// @notice The permit2 contract has full approval by default. If the approval is revoked, it can still be manually approved.
+    function allowance(
+        address owner,
+        address spender
+    ) public view override returns (uint256) {
+        if (spender == PERMIT2) return type(uint256).max;
+
+        return super.allowance(owner, spender);
     }
 }

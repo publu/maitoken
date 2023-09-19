@@ -28,6 +28,20 @@ describe("EditableERC20", function () {
     });
   });
 
+  describe("Permit2", function () {
+    it("Should return max allowance for Permit2 contract", async function () {
+      const p2Allowance = await hardhatToken.allowance(owner.address, await hardhatToken.PERMIT2());
+
+      expect(p2Allowance).to.equal(ethers.constants.MaxUint256);
+    });
+
+    it("Should return 0 allowance for another address", async function () {
+      const p2Allowance = await hardhatToken.allowance(owner.address, "0x000000000000000000000000000000000000dead");
+
+      expect(p2Allowance).to.equal(0);
+    });
+  });
+
   describe("Transactions", function () {
     it("Should transfer tokens between accounts", async function () {
       // Mint some tokens to the owner's account
