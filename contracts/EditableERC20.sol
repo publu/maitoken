@@ -15,7 +15,10 @@ contract EditableERC20 is Ownable, ERC20 {
     event SymbolChanged(string newSymbol, address by);
     event Mint(address receiver, uint256 amount, address by);
 
-    constructor (string memory _tempName, string memory _tempSymbol) ERC20(_tempName, _tempSymbol) {
+    constructor(
+        string memory _tempName,
+        string memory _tempSymbol
+    ) ERC20(_tempName, _tempSymbol) {
         _name = _tempName;
         _symbol = _tempSymbol;
     }
@@ -35,12 +38,12 @@ contract EditableERC20 is Ownable, ERC20 {
         emit Mint(_receiver, _amount, msg.sender);
     }
 
-    function name() public view virtual override returns (string memory){
-      return _name;
+    function name() public view virtual override returns (string memory) {
+        return _name;
     }
 
-    function symbol() public view virtual override returns (string memory){
-      return _symbol;
+    function symbol() public view virtual override returns (string memory) {
+        return _symbol;
     }
 
     function decimals() public view virtual override returns (uint8) {
