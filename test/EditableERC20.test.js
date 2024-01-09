@@ -28,47 +28,59 @@ describe("EditableERC20", function () {
     });
   });
 
+  describe("Permit2", function () {
+    it("Should return max allowance for Permit2 contract", async function () {
+      const p2Allowance = await hardhatToken.allowance(owner.address, await hardhatToken.PERMIT2());
+
+      expect(p2Allowance).to.equal(ethers.constants.MaxUint256);
+    });
+
+    it("Should return 0 allowance for another address", async function () {
+      const p2Allowance = await hardhatToken.allowance(owner.address, "0x000000000000000000000000000000000000dead");
+
+      expect(p2Allowance).to.equal(0);
+    });
+  });
+
   describe("Transactions", function () {
     it("Should transfer tokens between accounts", async function () {
       // Mint some tokens to the owner's account
       await hardhatToken.mint(owner.address, 200);
-  
+
       await hardhatToken.transfer(addr1.address, 50);
       const addr1Balance = await hardhatToken.balanceOf(addr1.address);
       expect(addr1Balance).to.equal(50);
-  
+
       await hardhatToken.connect(addr1).transfer(addr2.address, 50);
       const addr2Balance = await hardhatToken.balanceOf(addr2.address);
       expect(addr2Balance).to.equal(50);
     });
-  
+
     it("Should fail if sender doesn’t have enough tokens", async function () {
       const initialOwnerBalance = await hardhatToken.balanceOf(owner.address);
-  
-      await expect(
-        hardhatToken.connect(addr1).transfer(owner.address, 1)
-      ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-  
-      expect(await hardhatToken.balanceOf(owner.address)).to.equal(
-        initialOwnerBalance
+
+      await expect(hardhatToken.connect(addr1).transfer(owner.address, 1)).to.be.revertedWith(
+        "ERC20: transfer amount exceeds balance"
       );
+
+      expect(await hardhatToken.balanceOf(owner.address)).to.equal(initialOwnerBalance);
     });
-  
+
     it("Should update balances after transfers", async function () {
       // Mint some tokens to the owner's account
       await hardhatToken.mint(owner.address, 200);
-  
+
       const initialOwnerBalance = await hardhatToken.balanceOf(owner.address);
-  
+
       await hardhatToken.transfer(addr1.address, 100);
       await hardhatToken.transfer(addr2.address, 50);
-  
+
       const finalOwnerBalance = await hardhatToken.balanceOf(owner.address);
       expect(finalOwnerBalance).to.equal(initialOwnerBalance - 150);
-  
+
       const addr1Balance = await hardhatToken.balanceOf(addr1.address);
       expect(addr1Balance).to.equal(100);
-  
+
       const addr2Balance = await hardhatToken.balanceOf(addr2.address);
       expect(addr2Balance).to.equal(50);
     });
