@@ -10,12 +10,16 @@ async function main() {
   
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await hre.ethers.getContractFactory("EditableERC20");
-  const token = await Token.deploy("MyToken", "MTK");
+  const Token = await hre.ethers.getContractFactory("PermitableERC20");
+  const token = await Token.deploy("Mai Stablecoin", "MAI");
 
   await token.deployed();
 
   console.log("Token deployed to:", token.address);
+
+  await (await token.transferOwnership("0x20265d77e0F5A7E86fDb013e408C4AdF11289355")).wait(2);
+
+  console.log("Ownership transferred to: ", await token.owner());
 }
 
 main()

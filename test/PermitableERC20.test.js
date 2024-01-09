@@ -10,7 +10,7 @@ describe("EditableERC20", function () {
   let addrs;
 
   beforeEach(async function () {
-    EditableERC20 = await ethers.getContractFactory("EditableERC20");
+    EditableERC20 = await ethers.getContractFactory("PermitableERC20");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     hardhatToken = await EditableERC20.deploy("My Hardhat Token", "MHT");
