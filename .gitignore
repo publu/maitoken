@@ -14,4 +14,4 @@
 # IDE files
 /.vscode
 /.idea
-*.sol
+/*.sol
